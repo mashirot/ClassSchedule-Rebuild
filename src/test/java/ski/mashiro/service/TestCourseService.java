@@ -8,6 +8,7 @@ import ski.mashiro.pojo.Result;
 import ski.mashiro.util.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class TestCourseService {
     private static final String TABLE_NAME = "tb_6657";
     private final Course c1 = new Course("aaa", "aaa", "aaa", "Monday 10:00-11:00", "01-16");
+    private final Course c1_2 = new Course("aaa", "aaa", "aaa", "Monday 10:00-11:00", "01-04");
     private final Course c2 = new Course("bbb", "bbb", "bbb", "Monday 14:00-15:00", "01-16");
     private final Course c3 = new Course("ccc", "ccc", "ccc", "Tuesday 08:00-10:00", "01-16");
     private final Course c4 = new Course("ddd", "ddd", "ddd", "Tuesday 15:00-17:00", "01-16");
@@ -72,6 +74,30 @@ public class TestCourseService {
     public void testListAllDate() {
         Result result = courseService.listAllCourse(TABLE_NAME);
         // [Course(courseId=10, courseName=aaa, courseLocation=aaa, courseLecturer=aaa, courseDate=Monday 10:00-11:00), Course(courseId=8, courseName=ccc, courseLocation=ccc, courseLecturer=ccc, courseDate=Tuesday 08:00-10:00), Course(courseId=7, courseName=bbb, courseLocation=bbb, courseLecturer=bbb, courseDate=Monday 14:00-15:00), Course(courseId=9, courseName=ddd, courseLocation=ddd, courseLecturer=ddd, courseDate=Tuesday 15:00-17:00)]
+        System.out.println(result.getData());
+    }
+
+    @Test
+    public void testListEffCourseByName() {
+        Result result = courseService.listCourseByName("aaa", TABLE_NAME);
+        System.out.println(result.getData());
+    }
+
+    @Test
+    public void testListEffCourseByDate() {
+        Calendar instance = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        instance.set(now.get(Calendar.YEAR), Calendar.SEPTEMBER, 1);
+        Result result = courseService.listEffCourseByDate("Monday", instance.getTime(), TABLE_NAME);
+        System.out.println(result.getData());
+    }
+
+    @Test
+    public void testListEffAllDate() {
+        Calendar instance = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        instance.set(now.get(Calendar.YEAR), Calendar.SEPTEMBER, 1);
+        Result result = courseService.listAllEffCourse(instance.getTime(), TABLE_NAME);
         System.out.println(result.getData());
     }
 

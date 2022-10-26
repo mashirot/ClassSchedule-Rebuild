@@ -2,6 +2,7 @@ package ski.mashiro.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ski.mashiro.dao.CourseDao;
 import ski.mashiro.pojo.Code;
 import ski.mashiro.pojo.Course;
@@ -28,6 +29,18 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Result saveCourse(Course course, String tableName) {
         return new Result(courseDao.saveCourse(course, tableName) == 0 ? Code.SAVE_COURSE_FAILED : Code.SAVE_COURSE_SUCCESS, null);
+    }
+
+    @Override
+    public Result saveCourseFromFile(MultipartFile multipartFile, String tableName) {
+        List<Course> courseList = Utils.analyzeFile(multipartFile);
+        if (courseList == null) {
+            return new Result(Code.FILE_ANALYZE_FAILED, null);
+        }
+        for (Course course : courseList) {
+            courseDao.saveCourse(course, tableName);
+        }
+        return new Result(Code.FILE_ANALYZE_SUCCESS, null);
     }
 
     @Override

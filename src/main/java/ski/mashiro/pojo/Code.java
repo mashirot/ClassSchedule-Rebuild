@@ -33,5 +33,7 @@ public class Code {
     public static final Integer LIST_COURSE_BY_DATE_FAILED = 20060;
     public static final Integer LIST_ALL_COURSE_SUCCESS = 20071;
     public static final Integer LIST_ALL_COURSE_FAILED = 20070;
+    public static final Integer FILE_ANALYZE_SUCCESS = 20081;
+    public static final Integer FILE_ANALYZE_FAILED = 20080;
 
 }

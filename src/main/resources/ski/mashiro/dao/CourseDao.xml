@@ -44,7 +44,7 @@
     <select id="listCourseByName" resultMap="CourseResultMap">
         select course_id, course_name, course_location, course_lecturer, course_date, course_week
         from ${tableName}
-        where course_name = #{courseName};
+        where course_name like concat('%', #{courseName}, '%');
     </select>
     <select id="listCourseByDate" resultMap="CourseResultMap">
         select course_id, course_name, course_location, course_lecturer, course_date, course_week
