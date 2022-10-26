@@ -4,7 +4,10 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Random;
 
-public class Encrpt {
+/**
+ * @author MashiroT
+ */
+public class Encrypt {
     public static String generateSalt(int length) {
         StringBuilder sb = new StringBuilder(length);
         Random random = new Random();

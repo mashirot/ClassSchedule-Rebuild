@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ski.mashiro.dao.CourseDao">
+    <resultMap id="CourseResultMap" type="ski.mashiro.pojo.Course">
+        <id property="courseId" column="course_id" jdbcType="INTEGER"/>
+        <id property="courseName" column="course_name" jdbcType="VARCHAR"/>
+        <id property="courseLocation" column="course_location" jdbcType="VARCHAR"/>
+        <id property="courseLecturer" column="course_lecturer" jdbcType="VARCHAR"/>
+        <id property="courseDate" column="course_date" jdbcType="VARCHAR"/>
+        <id property="courseWeek" column="course_week" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="saveCourse">
+        insert into ${tableName} (course_name, course_location, course_lecturer, course_date, course_week)
+        values (#{course.courseName}, #{course.courseLocation}, #{course.courseLecturer}, #{course.courseDate}, #{course.courseWeek});
+    </insert>
+    <delete id="delCourseById">
+        delete
+        from ${tableName}
+        where course_id = #{id};
+    </delete>
+    <delete id="delCourseByName">
+        delete
+        from ${tableName}
+        where course_name like concat('%', #{courseName}, '%');
+    </delete>
+    <update id="updateCourse">
+        update ${tableName}
+        <set>
+            <if test="course.courseName != null">course_name = #{course.courseName},</if>
+            <if test="course.courseLocation != null">course_location = #{course.courseLocation},</if>
+            <if test="course.courseLecturer != null">course_lecturer = #{course.courseLecturer},</if>
+            <if test="course.courseDate != null">course_date = #{course.courseDate},</if>
+            <if test="course.courseWeek != null">course_week = #{course.courseWeek},</if>
+        </set>
+        where course_id = #{course.courseId};
+    </update>
+    <select id="getCourseById" resultMap="CourseResultMap">
+        select course_id, course_name, course_location, course_lecturer, course_date, course_week
+        from ${tableName}
+        where course_id = #{id};
+    </select>
+    <select id="listCourseByName" resultMap="CourseResultMap">
+        select course_id, course_name, course_location, course_lecturer, course_date, course_week
+        from ${tableName}
+        where course_name = #{courseName};
+    </select>
+    <select id="listCourseByDate" resultMap="CourseResultMap">
+        select course_id, course_name, course_location, course_lecturer, course_date, course_week
+        from ${tableName}
+        where course_date like concat('%', #{date}, '%');
+    </select>
+    <select id="listAllCourse" resultMap="CourseResultMap">
+        select course_id, course_name, course_location, course_lecturer, course_date, course_week
+        from ${tableName};
+    </select>
+</mapper>
