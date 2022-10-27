@@ -10,7 +10,7 @@
     </parent>
     <groupId>ski.mashiro</groupId>
     <artifactId>ClassSchedule-Rebuild</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.1.0</version>
     <name>ClassSchedule-Rebuild</name>
     <description>ClassSchedule-Rebuild</description>
     <properties>
