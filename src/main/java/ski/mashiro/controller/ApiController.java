@@ -30,7 +30,7 @@ public class ApiController {
     @PostMapping("/effSchedules")
     public Result listAllEffectiveCourses(@RequestBody User user) {
         Result loginRs = userService.getUserByApiToken(user.getUserCode(), user.getUserApiToken());
-        if (loginRs.getCode().equals(Code.GET_USER_API_SUCCESS)) {
+        if (loginRs.getCode().equals(Code.GET_USER_BY_API_TOKEN_SUCCESS)) {
             User data = (User) loginRs.getData();
             return courseService.listAllEffCourse(data.getTermInitDate(), data.getUserTableName());
         }
@@ -40,7 +40,7 @@ public class ApiController {
     @PostMapping("/schedules")
     public Result listAllCourses(@RequestBody User user) {
         Result loginRs = userService.getUserByApiToken(user.getUserCode(), user.getUserApiToken());
-        if (loginRs.getCode().equals(Code.GET_USER_API_SUCCESS)) {
+        if (loginRs.getCode().equals(Code.GET_USER_BY_API_TOKEN_SUCCESS)) {
             User data = (User) loginRs.getData();
             return courseService.listAllCourse(data.getUserTableName());
         }
@@ -50,7 +50,7 @@ public class ApiController {
     @PostMapping("/effDateSchedules")
     public Result listEffCourseByDate(@RequestBody User user) {
         Result loginRs = userService.getUserByApiToken(user.getUserCode(), user.getUserApiToken());
-        if (loginRs.getCode().equals(Code.GET_USER_API_SUCCESS)) {
+        if (loginRs.getCode().equals(Code.GET_USER_BY_API_TOKEN_SUCCESS)) {
             User data = (User) loginRs.getData();
             return courseService.listEffCourseByDate(Utils.getWeek(), data.getTermInitDate(), data.getUserTableName());
         }
@@ -60,7 +60,7 @@ public class ApiController {
     @PostMapping("/dateSchedules")
     public Result listCourseByDate(@RequestBody User user) {
         Result loginRs = userService.getUserByApiToken(user.getUserCode(), user.getUserApiToken());
-        if (loginRs.getCode().equals(Code.GET_USER_API_SUCCESS)) {
+        if (loginRs.getCode().equals(Code.GET_USER_BY_API_TOKEN_SUCCESS)) {
             User data = (User) loginRs.getData();
             return courseService.listCourseByDate(Utils.getWeek(), data.getUserTableName());
         }
