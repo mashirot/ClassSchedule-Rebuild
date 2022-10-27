@@ -27,7 +27,7 @@ public class TestUserService {
         User user = new User();
         user.setUserCode("6657");
         user.setUserPassword("91043222");
-        Result result = userService.deleteUser(user.getUserCode(), user.getUserPassword());
+        Result result = userService.deleteUser(user.getUserCode());
         System.out.println(result.getCode());
     }
     @Test

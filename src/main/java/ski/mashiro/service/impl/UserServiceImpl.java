@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         if (user.getUserCode().length() < 4 || user.getUserCode().length() > 30) {
             return new Result(Code.SAVE_USER_FAILED, null);
         }
-        if (user.getUserPassword().length() < 8 || user.getUserPassword().length() > 32) {
+        if (user.getUserPassword().length() != 40) {
             return new Result(Code.SAVE_USER_FAILED, null);
         }
         tableService.createUserTable();
@@ -39,24 +39,24 @@ public class UserServiceImpl implements UserService {
         user.setUserPassword(Encrypt.encrypt(user.getUserPassword(), user.getUserPasswordSalt()));
         user.setUserTableName("tb_" + user.getUserCode());
         user.setUserApiToken(Encrypt.encrypt(Encrypt.generateSalt(50), Encrypt.generateSalt(50)));
-        tableService.createCourseTable(user.getUserTableName());
+        try {
+            tableService.createCourseTable(user.getUserTableName());
+        } catch (Exception e) {
+            return new Result(Code.SAVE_USER_FAILED, null);
+        }
         return new Result(userDao.saveUser(user) == 0 ? Code.SAVE_USER_FAILED : Code.SAVE_USER_SUCCESS, null);
     }
 
     @Override
-    public Result deleteUser(String userCode, String password) {
-        if (password.length() < 8 || password.length() > 32) {
-            return new Result(Code.DELETE_USER_FAILED, null);
-        }
-        password = Encrypt.encrypt(password, userDao.getUserSalt(userCode));
+    public Result deleteUser(String userCode) {
         tableService.deleteCourseTable("tb_" + userCode);
-        return new Result(userDao.delUser(userCode, password) == 0 ? Code.DELETE_USER_FAILED : Code.DELETE_USER_SUCCESS, null);
+        return new Result(userDao.delUser(userCode) == 0 ? Code.DELETE_USER_FAILED : Code.DELETE_USER_SUCCESS, null);
     }
 
     @Override
     public Result updateUser(User user) {
         if (user.getUserPassword() != null) {
-            if (user.getUserPassword().length() < 8 || user.getUserPassword().length() > 32) {
+            if (user.getUserPassword().length() != 40) {
                 return new Result(Code.UPDATE_USER_FAILED, null);
             }
             user.setUserPassword(Encrypt.encrypt(user.getUserPassword(), userDao.getUserSalt(user.getUserCode())));
@@ -84,7 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result getUserByPassword(String userCode, String userPasswd) {
-        if (userPasswd.length() < 8 || userPasswd.length() > 32) {
+        if (userPasswd.length() != 40) {
             return new Result(Code.GET_USER_BY_PASSWORD_SUCCESS, null);
         }
         User userByPassword = userDao.getUserByPassword(userCode, Encrypt.encrypt(userPasswd, userDao.getUserSalt(userCode)));

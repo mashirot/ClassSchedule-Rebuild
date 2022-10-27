@@ -11,7 +11,7 @@ import java.util.Date;
 @Mapper
 public interface UserDao {
     int saveUser(@Param("user") User user);
-    int delUser(@Param("userCode") String userCode, @Param("userPassword") String userPassword);
+    int delUser(@Param("userCode") String userCode);
     int updateUser(@Param("user") User user);
     String getUserSalt(@Param("userCode") String userCode);
     Date getInitDate(@Param("userCode") String userCode);

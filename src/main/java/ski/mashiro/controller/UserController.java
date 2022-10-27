@@ -1,4 +1,4 @@
-package ski.mashiro.Controller;
+package ski.mashiro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * @author MashiroT
@@ -32,14 +33,23 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @DeleteMapping
-    public Result deleteUser(@RequestBody User user) {
-        return userService.deleteUser(user.getUserCode(), user.getUserPassword());
+    @DeleteMapping("/{userCode}")
+    public Result deleteUser(@PathVariable String userCode) {
+        return userService.deleteUser(userCode);
     }
 
     @PutMapping
-    public Result updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    public Result updateUser(@RequestBody User user, HttpServletResponse response) {
+        Result result = userService.updateUser(user);
+        if (user.getTermInitDate() != null) {
+            if (result.getCode().equals(Code.UPDATE_USER_SUCCESS)) {
+                Cookie initDate = new Cookie("initDate", Utils.dateToStr(user.getTermInitDate()));
+                initDate.setPath("/");
+                initDate.setMaxAge(24 * 60 * 60);
+                response.addCookie(initDate);
+            }
+        }
+        return result;
     }
 
     @GetMapping("/initDate")
@@ -59,16 +69,46 @@ public class UserController {
             return userByPassword;
         }
         Cookie userCode = new Cookie("userCode", ((User) userByPassword.getData()).getUserCode());
+        Cookie userNickname = new Cookie("userNickname", ((User) userByPassword.getData()).getUserNickname());
         Cookie initDate = new Cookie("initDate", Utils.dateToStr(((User) userByPassword.getData()).getTermInitDate()));
+        Cookie currentWeek = new Cookie("currentWeek", Utils.calcCurrentWeek(new Date(), ((User) userByPassword.getData()).getTermInitDate()));
         userCode.setPath("/");
         userCode.setMaxAge(24 * 60 * 60);
+        userNickname.setPath("/");
+        userNickname.setMaxAge(24 * 60 * 60);
         initDate.setPath("/");
         initDate.setMaxAge(24 * 60 * 60);
+        currentWeek.setPath("/");
+        currentWeek.setMaxAge(24 * 60 * 60);
         response.addCookie(userCode);
+        response.addCookie(userNickname);
         response.addCookie(initDate);
+        response.addCookie(currentWeek);
         HttpSession session = request.getSession();
         session.setAttribute("userCode", ((User) userByPassword.getData()).getUserCode());
         return userByPassword;
+    }
+
+    @PostMapping("/logout")
+    public Result logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie userCode = new Cookie("userCode", null);
+        Cookie userNickname = new Cookie("userNickname", null);
+        Cookie initDate = new Cookie("initDate", null);
+        Cookie currentWeek = new Cookie("currentWeek", null);
+        userCode.setPath("/");
+        userCode.setMaxAge(0);
+        userNickname.setPath("/");
+        userNickname.setMaxAge(0);
+        initDate.setPath("/");
+        initDate.setMaxAge(0);
+        currentWeek.setPath("/");
+        currentWeek.setMaxAge(0);
+        response.addCookie(userCode);
+        response.addCookie(userNickname);
+        response.addCookie(initDate);
+        response.addCookie(currentWeek);
+        request.getSession().invalidate();
+        return new Result(Code.USER_LOGOUT_SUCCESS,null);
     }
 
 }

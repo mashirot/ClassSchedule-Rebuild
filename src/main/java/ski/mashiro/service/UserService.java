@@ -17,10 +17,9 @@ public interface UserService {
     /**
      * 删除用户
      * @param userCode 学号
-     * @param password 密码
      * @return 结果
      */
-    Result deleteUser(String userCode, String password);
+    Result deleteUser(String userCode);
 
     /**
      * 更新用户信息

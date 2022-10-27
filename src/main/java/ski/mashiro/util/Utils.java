@@ -79,6 +79,9 @@ public class Utils {
             String[] courses = data.trim().split("#");
             List<Course> courseList = new ArrayList<>(courses.length);
             for (String course : courses) {
+                if (course.length() == 0) {
+                    continue;
+                }
                 String[] details = course.split("\\|");
                 Course c = new Course();
                 c.setCourseName(details[0]);
@@ -86,7 +89,9 @@ public class Utils {
                 c.setCourseLecturer(details[2]);
                 c.setCourseDate(details[3]);
                 c.setCourseWeek(details[4]);
+                courseList.add(c);
             }
+            return courseList;
         } catch (Exception e) {
             e.printStackTrace();
         }

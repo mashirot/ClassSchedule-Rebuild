@@ -1,4 +1,4 @@
-package ski.mashiro.Controller;
+package ski.mashiro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +26,13 @@ public class CourseController {
         return courseService.saveCourse(course, "tb_" + userCode);
     }
 
-    @DeleteMapping("/id")
-    public Result deleteCourseById(@RequestBody Integer id, @CookieValue String userCode) {
+    @DeleteMapping("/id/{id}")
+    public Result deleteCourseById(@PathVariable Integer id, @CookieValue String userCode) {
         return courseService.delCourseById(id, "tb_" + userCode);
     }
 
-    @DeleteMapping("/name")
-    public Result deleteCourseByName(@RequestBody String courseName, @CookieValue String userCode) {
+    @DeleteMapping("/name/{courseName}")
+    public Result deleteCourseByName(@PathVariable String courseName, @CookieValue String userCode) {
         return courseService.delCourseByName(courseName, "tb_" + userCode);
     }
 

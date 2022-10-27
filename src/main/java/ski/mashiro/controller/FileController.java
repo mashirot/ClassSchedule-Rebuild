@@ -1,4 +1,4 @@
-package ski.mashiro.Controller;
+package ski.mashiro.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ public class FileController {
     }
 
     @PostMapping("/update")
-    public Result update(@RequestBody MultipartFile file, @CookieValue(value = "userTableName") String userTableName) {
-        return courseService.saveCourseFromFile(file, userTableName);
+    public Result update(@RequestBody MultipartFile file, @CookieValue(value = "userCode") String userCode) {
+        return courseService.saveCourseFromFile(file, "tb_" + userCode);
     }
 
 }

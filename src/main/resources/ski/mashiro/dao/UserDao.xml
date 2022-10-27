@@ -19,7 +19,7 @@
     <delete id="delUser">
         delete
         from user
-        where user_code = #{userCode} and user_password = #{userPassword};
+        where user_code = #{userCode};
     </delete>
     <update id="updateUser">
         update user

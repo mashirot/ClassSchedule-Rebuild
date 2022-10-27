@@ -35,5 +35,5 @@ public class Code {
     public static final Integer LIST_ALL_COURSE_FAILED = 20070;
     public static final Integer FILE_ANALYZE_SUCCESS = 20081;
     public static final Integer FILE_ANALYZE_FAILED = 20080;
-
+    public static final Integer USER_LOGOUT_SUCCESS = 20091;
 }

@@ -104,6 +104,9 @@ public class CourseServiceImpl implements CourseService {
             return new Result(Code.LIST_COURSE_BY_NAME_FAILED, null);
         }
         List<Course> effCourseList = getEffCourseList(initDate, courseList);
+        if (effCourseList == null) {
+            return new Result(Code.LIST_ALL_COURSE_FAILED, null);
+        }
         return new Result(Code.LIST_COURSE_BY_NAME_SUCCESS, effCourseList);
     }
 
@@ -114,6 +117,9 @@ public class CourseServiceImpl implements CourseService {
             return new Result(Code.LIST_COURSE_BY_DATE_FAILED, null);
         }
         List<Course> effCourseList = getEffCourseList(initDate, courseList);
+        if (effCourseList == null) {
+            return new Result(Code.LIST_ALL_COURSE_FAILED, null);
+        }
         return new Result(Code.LIST_COURSE_BY_DATE_SUCCESS, effCourseList);
     }
 
@@ -124,21 +130,29 @@ public class CourseServiceImpl implements CourseService {
             return new Result(Code.LIST_ALL_COURSE_FAILED, null);
         }
         List<Course> effCourseList = getEffCourseList(initDate, courseList);
+        if (effCourseList == null) {
+            return new Result(Code.LIST_ALL_COURSE_FAILED, null);
+        }
         return new Result(Code.LIST_ALL_COURSE_SUCCESS, effCourseList);
     }
 
     private List<Course> getEffCourseList(Date initDate, List<Course> courseList) {
-        List<Course> rsList = new ArrayList<>(courseList.size());
-        int currentWeek = Integer.parseInt(Utils.calcCurrentWeek(new Date(), initDate));
-        for (Course course : courseList) {
-            String[] weeks = course.getCourseWeek().split("-");
-            if (Integer.parseInt(weeks[0]) > currentWeek || Integer.parseInt(weeks[1]) < currentWeek) {
-                continue;
+        try {
+            List<Course> rsList = new ArrayList<>(courseList.size());
+            int currentWeek = Integer.parseInt(Utils.calcCurrentWeek(new Date(), initDate));
+            for (Course course : courseList) {
+                String[] weeks = course.getCourseWeek().split("-");
+                if (Integer.parseInt(weeks[0].trim()) > currentWeek || Integer.parseInt(weeks[1].trim()) < currentWeek) {
+                    continue;
+                }
+                rsList.add(course);
             }
-            rsList.add(course);
+            rsList.sort(((o1, o2) -> comp(o1, o2)));
+            return rsList;
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-        rsList.sort(((o1, o2) -> comp(o1, o2)));
-        return rsList;
+        return null;
     }
 
     private static int comp(Course o1, Course o2) {
